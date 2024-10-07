@@ -6,30 +6,69 @@ import java.io.FileNotFoundException;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        ArrayList<Double> data_a1 = readLines("Project1\\data\\data_a1.txt");
-        ArrayList<Double> data_a2 = readLines("Project1\\data\\data_a2.txt");
-        ArrayList<Double> data_a3 = readLines("Project1\\data\\data_a3.txt");
+        //Task_1.1
+        ArrayList<Double> data_a1 = readLines("Project1/data/data_a1.txt");
+        ArrayList<Double> data_a2 = readLines("Project1/data/data_a2.txt");
+        ArrayList<Double> data_a3 = readLines("Project1/data/data_a3.txt");
+
+        displayInfo("Task I.1", data_a1, "data_a1.txt");
+        displayInfo("Task I.1", data_a2, "data_a2.txt");
+        displayInfo("Task I.1", data_a3, "data_a3.txt");
+
+        //Task_1.2
+        ArrayList<Double> data_b1 = readLines("Project1/data/data_b1.txt");
+        ArrayList<Double> data_b2 = readLines("Project1/data/data_b2.txt");
+        ArrayList<Double> data_b3 = readLines("Project1/data/data_b3.txt");
         
-        displayInfo(data_a1, "data_a1.txt");
-        displayInfo(data_a2, "data_a2.txt");
-        displayInfo(data_a3, "data_a3.txt");
+        displayInfo("Task I.2", data_b1, "data_b1.txt");
+        displayInfo("Task I.2", data_b2, "data_b2.txt");
+        displayInfo("Task I.2", data_b3, "data_b3.txt");
 
     }
 
-    public static void displayInfo(ArrayList<Double> data, String fileName)
+    public static void displayInfo(String title, ArrayList<Double> data, String fileName)
     {
-        System.out.println("\nTask I.1");
-        System.out.println("Maciej Malachowski 292773");
-        System.out.println("--------------------");
-        System.out.println("Data filename: "+ fileName);
-        System.out.println("Length of the series: "+data.size());
-        System.out.format("Max value: %.3f\n", getMax(data));
-        System.out.format("Min value: %.3f\n", getMin(data));
-        System.out.format("Mean value: %.3f\n", getMean(data));
-        System.out.format("Median: %.3f\n", getMedian(data));
-        System.out.println("Number of central elements: "+noOfCentralElements(data));
-        System.out.println("--------------------\n");
+        String output = "";
+        output += title + "\n";
+        output += "Maciej Malachowski, 292773\n";
+        output += "--------------------\n";
+        output += "Data filename: "+ fileName + "\n";
+        output += "Length of the series: "+ data.size() + "\n";
+        output += String.format("Max value: %.3f\n", getMax(data));
+        output += String.format("Min value: %.3f\n", getMin(data));
+        output += String.format("Mean value: %.3f\n", getMean(data));
+        output += String.format("Median: %.3f\n", getMedian(data));
+        output += "Number of central elements: "+noOfCentralElements(data) + "\n";
+        output += "--------------------\n";
+
+        System.out.println(output);
     }
+
+    // Task_1.1
+
+    // public static ArrayList<Double> readLines(String dir)
+    // {
+    //     ArrayList<Double> list = new ArrayList<>();
+    //     File file = new File(dir);
+    //     try(Scanner myScanner = new Scanner(file))
+    //     {
+    //         while(myScanner.hasNextLine())
+    //         {
+    //             String line = myScanner.nextLine();
+    //             double number = Double.parseDouble(line);
+    //             list.add(number);
+    //         }
+    //     }
+    //     catch(FileNotFoundException e)
+    //     {
+    //         System.out.println("An error occurred.");
+    //         e.printStackTrace();
+    //     }
+    //     return list;
+    // }
+
+    
+    // Task_1.2
 
     public static ArrayList<Double> readLines(String dir)
     {
@@ -40,8 +79,15 @@ public class App {
             while(myScanner.hasNextLine())
             {
                 String line = myScanner.nextLine();
-                double number = Double.parseDouble(line);
-                list.add(number);
+                try
+                {
+                    double number = Double.parseDouble(line);
+                    list.add(number);
+                }
+                catch(NumberFormatException e)
+                {
+                    continue;
+                }
             }
         }
         catch(FileNotFoundException e)
