@@ -6,74 +6,27 @@ import java.io.FileNotFoundException;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        //Task_1.1
-        ArrayList<Double> data_a1 = readLines("Project1/data/data_a1.txt");
-        ArrayList<Double> data_a2 = readLines("Project1/data/data_a2.txt");
-        ArrayList<Double> data_a3 = readLines("Project1/data/data_a3.txt");
+        String dir = "Project1/data/data_b3.txt";
 
-        displayInfo("Task I.1", data_a1, "data_a1.txt");
-        displayInfo("Task I.1", data_a2, "data_a2.txt");
-        displayInfo("Task I.1", data_a3, "data_a3.txt");
-
-        //Task_1.2
-        ArrayList<Double> data_b1 = readLines("Project1/data/data_b1.txt");
-        ArrayList<Double> data_b2 = readLines("Project1/data/data_b2.txt");
-        ArrayList<Double> data_b3 = readLines("Project1/data/data_b3.txt");
-        
-        displayInfo("Task I.2", data_b1, "data_b1.txt");
-        displayInfo("Task I.2", data_b2, "data_b2.txt");
-        displayInfo("Task I.2", data_b3, "data_b3.txt");
-
-    }
-
-    public static void displayInfo(String title, ArrayList<Double> data, String fileName)
-    {
-        String output = "";
-        output += title + "\n";
-        output += "Maciej Malachowski, 292773\n";
-        output += "--------------------\n";
-        output += "Data filename: "+ fileName + "\n";
-        output += "Length of the series: "+ data.size() + "\n";
-        output += String.format("Max value: %.3f\n", getMax(data));
-        output += String.format("Min value: %.3f\n", getMin(data));
-        output += String.format("Mean value: %.3f\n", getMean(data));
-        output += String.format("Median: %.3f\n", getMedian(data));
-        output += "Number of central elements: "+noOfCentralElements(data) + "\n";
-        output += "--------------------\n";
-
-        System.out.println(output);
-    }
-
-    // Task_1.1
-
-    // public static ArrayList<Double> readLines(String dir)
-    // {
-    //     ArrayList<Double> list = new ArrayList<>();
-    //     File file = new File(dir);
-    //     try(Scanner myScanner = new Scanner(file))
-    //     {
-    //         while(myScanner.hasNextLine())
-    //         {
-    //             String line = myScanner.nextLine();
-    //             double number = Double.parseDouble(line);
-    //             list.add(number);
-    //         }
-    //     }
-    //     catch(FileNotFoundException e)
-    //     {
-    //         System.out.println("An error occurred.");
-    //         e.printStackTrace();
-    //     }
-    //     return list;
-    // }
-
-    
-    // Task_1.2
-
-    public static ArrayList<Double> readLines(String dir)
-    {
         ArrayList<Double> list = new ArrayList<>();
         File file = new File(dir);
+
+        // try(Scanner myScanner = new Scanner(file))
+        //     {
+        //         while(myScanner.hasNextLine())
+        //         {
+        //             String line = myScanner.nextLine();
+        //             double number = Double.parseDouble(line);
+        //             list.add(number);
+        //         }
+        //     }
+        //     catch(FileNotFoundException e)
+        //     {
+        //         System.out.println("An error occurred.");
+        //         e.printStackTrace();
+        //     }
+
+        int invalid_records = 0;
         try(Scanner myScanner = new Scanner(file))
         {
             while(myScanner.hasNextLine())
@@ -86,7 +39,7 @@ public class App {
                 }
                 catch(NumberFormatException e)
                 {
-                    continue;
+                    invalid_records += 1;
                 }
             }
         }
@@ -95,8 +48,34 @@ public class App {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        return list;
+
+
+        displayInfo("Task I.1", list, file.getName(), invalid_records);
+
     }
+
+    public static void displayInfo(String title, ArrayList<Double> data, String fileName, int invalid_records)
+    {
+        String output = "";
+        output += title + "\n";
+        output += "Maciej Malachowski, 292773\n";
+        output += "--------------------\n";
+        output += "Data filename: "+ fileName + "\n";
+        output += "Length of the series: "+ data.size() + "\n";
+        output += String.format("Max value: %.3f\n", getMax(data));
+        output += String.format("Min value: %.3f\n", getMin(data));
+        output += String.format("Mean value: %.3f\n", getMean(data));
+        output += String.format("Median: %.3f\n", getMedian(data));
+        output += "Number of central elements: "+noOfCentralElements(data) + "\n";
+        if (invalid_records != 0)
+        {
+            output += "Number of invalid records: "+ invalid_records + "\n";
+        }
+        output += "--------------------\n";
+
+        System.out.println(output);
+    }
+
 
     public static double getMax(ArrayList<Double> list)
     {
