@@ -6,25 +6,32 @@ import java.io.FileNotFoundException;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        String dir = "Project1/data/data_b3.txt";
 
+        String dir = "Project1/data/data_a3.txt";
         ArrayList<Double> list = new ArrayList<>();
         File file = new File(dir);
 
-        // try(Scanner myScanner = new Scanner(file))
-        //     {
-        //         while(myScanner.hasNextLine())
-        //         {
-        //             String line = myScanner.nextLine();
-        //             double number = Double.parseDouble(line);
-        //             list.add(number);
-        //         }
-        //     }
-        //     catch(FileNotFoundException e)
-        //     {
-        //         System.out.println("An error occurred.");
-        //         e.printStackTrace();
-        //     }
+        try(Scanner myScanner = new Scanner(file))
+            {
+                while(myScanner.hasNextLine())
+                {
+                    String line = myScanner.nextLine();
+                    double number = Double.parseDouble(line);
+                    list.add(number);
+                }
+            }
+            catch(FileNotFoundException e)
+            {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+
+        displayInfo("Task I.1", list, file.getName(), 0);
+
+
+        dir = "Project1/data/data_b3.txt";
+        list.clear();
+        file = new File(dir);
 
         int invalid_records = 0;
         try(Scanner myScanner = new Scanner(file))
@@ -50,7 +57,7 @@ public class App {
         }
 
 
-        displayInfo("Task I.1", list, file.getName(), invalid_records);
+        displayInfo("Task I.2", list, file.getName(), invalid_records);
 
     }
 
