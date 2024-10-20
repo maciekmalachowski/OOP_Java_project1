@@ -59,36 +59,35 @@ public class App {
         displayInfo("Task I.2", list, file.getName(), invalid_records);
 
     // Task 1.3
-        // dir = "Project1/data/data_c1.txt";
-        // list.clear();
-        // file = new File(dir);
+        dir = "Project1/data/data_c1.txt";
+        list.clear();
+        file = new File(dir);
 
-        // invalid_records = 0;
-        // try(Scanner myScanner = new Scanner(file))
-        // {
-        //     while(myScanner.hasNextLine())
-        //     {
-        //         String line = myScanner.nextLine();
-        //         try
-        //         {
-        //             double number = Double.parseDouble(line);
-                        // list.add(new Readout(number));
-                    //             
-        //         }
-        //         catch(NumberFormatException e)
-        //         {
-        //             invalid_records += 1;
-        //         }
-        //     }
-        // }
-        // catch(FileNotFoundException e)
-        // {
-        //     System.out.println("An error occurred.");
-        //     e.printStackTrace();
-        // }
+        invalid_records = 0;
+        try(Scanner myScanner = new Scanner(file))
+        {
+            while(myScanner.hasNextLine())
+            {
+                String line = myScanner.nextLine();
+                try
+                {
+                    String[] result = line.split(" id:");
+                    double number = Double.parseDouble(result[0]);
+                    list.add(new ReadoutWithUuid(number, result[1]));
+                }
+                catch(NumberFormatException e)
+                {
+                    invalid_records += 1;
+                }
+            }
+        }
+        catch(FileNotFoundException e)
+        {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
 
-
-        // displayInfo("Task II.1", list, file.getName(), invalid_records);
+        displayInfo("Task II.1", list, file.getName(), invalid_records);
 
     }
 
@@ -100,8 +99,8 @@ public class App {
         output += "--------------------\n";
         output += "Data filename: "+ fileName + "\n";
         output += "Length of the series: "+ data.size() + "\n";
-        output += String.format("Max value: %.3f\n", getMax(data).getValue());
-        output += String.format("Min value: %.3f\n", getMin(data).getValue());
+        output += "Max value: " + getMax(data).toString() + "\n";
+        output += "Min value: " + getMin(data).toString() + "\n";
         output += String.format("Mean value: %.3f\n", getMean(data));
         output += String.format("Median: %.3f\n", getMedian(data));
         output += "Number of central elements: " + noOfCentralElements(data) + "\n";
