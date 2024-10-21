@@ -6,8 +6,10 @@ import java.io.FileNotFoundException;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        Logger logger_a = new LoggerFile("data_a.log");
+
     // Task 1.1
-        String dir = "Project1/data/data_a3.txt";
+        String dir = "Project1/data/data_a1.txt";
         ArrayList<Readout> list = new ArrayList<>();
         File file = new File(dir);
 
@@ -22,13 +24,16 @@ public class App {
             }
             catch(FileNotFoundException e)
             {
+                logger_a.log(Logger.Level.ERROR, dir);
                 System.out.println("An error occurred.");
                 e.printStackTrace();
             }
 
-        displayInfo("Task I.1", list, file.getName(), 0);
+        getOutputInfo("Task I.1", list, file.getName(), 0);
+        logger_a.flush();
 
     // Task 1.2
+        Logger logger_b = new LoggerFile("data_b.log");
         dir = "Project1/data/data_b3.txt";
         list.clear();
         file = new File(dir);
@@ -46,6 +51,7 @@ public class App {
                 }
                 catch(NumberFormatException e)
                 {
+                    logger_b.log(Logger.Level.ERROR, "Faulty record in ["+dir+"]:"+line);
                     invalid_records += 1;
                 }
             }
@@ -56,9 +62,11 @@ public class App {
             e.printStackTrace();
         }
 
-        displayInfo("Task I.2", list, file.getName(), invalid_records);
+        getOutputInfo("Task I.2", list, file.getName(), invalid_records);
+        logger_b.flush();
 
     // Task 1.3
+        Logger logger_c = new LoggerFile("data_c.log");
         dir = "Project1/data/data_c1.txt";
         list.clear();
         file = new File(dir);
@@ -77,6 +85,7 @@ public class App {
                 }
                 catch(NumberFormatException e)
                 {
+                    logger_c.log(Logger.Level.ERROR, "Faulty record in ["+dir+"]:"+line);
                     invalid_records += 1;
                 }
             }
@@ -87,11 +96,11 @@ public class App {
             e.printStackTrace();
         }
 
-        displayInfo("Task II.1", list, file.getName(), invalid_records);
-
+        getOutputInfo("Task II.1", list, file.getName(), invalid_records);
+        logger_c.flush();
     }
 
-    public static void displayInfo(String title, ArrayList<Readout> data, String fileName, int invalid_records)
+    public static void getOutputInfo(String title, ArrayList<Readout> data, String fileName, int invalid_records)
     {
         String output = "";
         output += title + "\n";
@@ -102,7 +111,7 @@ public class App {
         output += "Max value: " + getMax(data).toString() + "\n";
         output += "Min value: " + getMin(data).toString() + "\n";
         output += String.format("Mean value: %.3f\n", getMean(data));
-        output += String.format("Median: %.3f\n", getMedian(data));
+        output += "Median: " + getMedian(data).toString() + "\n";
         output += "Number of central elements: " + noOfCentralElements(data) + "\n";
         if (invalid_records != 0)
         {
@@ -137,18 +146,18 @@ public class App {
         return mean;
     }
 
-    static double getMedian(ArrayList<Readout> list)
+    static MedianWrapper getMedian(ArrayList<Readout> list)
     {
         Collections.sort(list);
         if(list.size()%2==1)
         {
-            return list.get(list.size()/2).getValue();
+            return new MedianWrapper(list.get(list.size()/2));
         }
         else
         {
-            double number1 = list.get(list.size()/2).getValue();
-            double number2 = list.get(list.size()/2 - 1).getValue();
-            return (number1+number2)/2;
+            Readout number1 = list.get(list.size()/2);
+            Readout number2 = list.get(list.size()/2 - 1);
+            return new MedianWrapper(number1, number2);
         }
     }
 
