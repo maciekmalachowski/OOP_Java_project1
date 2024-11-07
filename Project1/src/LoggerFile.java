@@ -16,7 +16,7 @@ public class LoggerFile extends Logger {
             }
             clear();
         } catch (FileNotFoundException e) {
-            System.out.println("Can’t flush the log. Please check the filename: " + fileName);
+            System.out.println("Can't flush the log. Please check the filename: " + fileName);
         }
     }
 }

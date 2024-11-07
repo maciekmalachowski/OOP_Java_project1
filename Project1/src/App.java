@@ -65,7 +65,7 @@ public class App {
         getOutputInfo("Task I.2", list, file.getName(), invalid_records);
         logger_b.flush();
 
-    // Task 1.3
+    // Task 2
         Logger logger_c = new LoggerFile("data_c.log");
         dir = "Project1/data/data_c1.txt";
         list.clear();
@@ -80,8 +80,7 @@ public class App {
                 try
                 {
                     String[] result = line.split(" id:");
-                    double number = Double.parseDouble(result[0]);
-                    list.add(new ReadoutWithUuid(number, result[1]));
+                    list.add(new ReadoutWithUuid(Double.parseDouble(result[0]), result[1]));
                 }
                 catch(NumberFormatException e)
                 {
