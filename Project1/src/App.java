@@ -3,109 +3,38 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Logger logger_a = new LoggerFile("data_a.log");
+    // Task I.1
+    processOneFile("data_a1.txt","data_a.log","Task I.1");
 
-    // Task 1.1
-        String dir = "Project1/data/data_a1.txt";
-        ArrayList<Readout> list = new ArrayList<>();
-        File file = new File(dir);
+    // Task I.2
+    processOneFile("data_b1.txt","data_b.log","Task I.2");
 
-        try(Scanner myScanner = new Scanner(file))
-            {
-                while(myScanner.hasNextLine())
-                {
-                    String line = myScanner.nextLine();
-                    double number = Double.parseDouble(line);
-                    list.add(new Readout(number));
-                }
-            }
-            catch(FileNotFoundException e)
-            {
-                logger_a.log(Logger.Level.ERROR, dir);
-                System.out.println("An error occurred.");
-                e.printStackTrace();
-            }
-
-        getOutputInfo("Task I.1", list, file.getName(), 0);
-        logger_a.flush();
-
-    // Task 1.2
-        Logger logger_b = new LoggerFile("data_b.log");
-        dir = "Project1/data/data_b3.txt";
-        list.clear();
-        file = new File(dir);
-
-        int invalid_records = 0;
-        try(Scanner myScanner = new Scanner(file))
-        {
-            while(myScanner.hasNextLine())
-            {
-                String line = myScanner.nextLine();
-                try
-                {
-                    double number = Double.parseDouble(line);
-                    list.add(new Readout(number));
-                }
-                catch(NumberFormatException e)
-                {
-                    logger_b.log(Logger.Level.ERROR, "Faulty record in ["+dir+"]:"+line);
-                    invalid_records += 1;
-                }
-            }
-        }
-        catch(FileNotFoundException e)
-        {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        getOutputInfo("Task I.2", list, file.getName(), invalid_records);
-        logger_b.flush();
-
-    // Task 2
-        Logger logger_c = new LoggerFile("data_c.log");
-        dir = "Project1/data/data_c1.txt";
-        list.clear();
-        file = new File(dir);
-
-        invalid_records = 0;
-        try(Scanner myScanner = new Scanner(file))
-        {
-            while(myScanner.hasNextLine())
-            {
-                String line = myScanner.nextLine();
-                try
-                {
-                    String[] result = line.split(" id:");
-                    list.add(new ReadoutWithUuid(Double.parseDouble(result[0]), result[1]));
-                }
-                catch(NumberFormatException e)
-                {
-                    logger_c.log(Logger.Level.ERROR, "Faulty record in ["+dir+"]:"+line);
-                    invalid_records += 1;
-                }
-            }
-        }
-        catch(FileNotFoundException e)
-        {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        getOutputInfo("Task II.1", list, file.getName(), invalid_records);
-        logger_c.flush();
+    // Task II.2
+    processOneFile("data_c1.txt","data_c.log","Task II.2");
+        
     }
 
-    public static void getOutputInfo(String title, ArrayList<Readout> data, String fileName, int invalid_records)
+    static void processOneFile(String filename, String logFilename, String title) throws IOException{
+        Logger logger = new LoggerFile(logFilename);
+        FileContent fContent = IOHelper.readFile(filename, logger);
+        System.out.println(getOutputInfo(fContent, title));
+        logger.flush();
+    }
+
+    public static String getOutputInfo(FileContent fContent, String title)
     {
+        ArrayList<Readout> data = fContent.getData();
+        String filename = fContent.getFileName();
+        int invalid_records = fContent.getNoOfInvalidRecords();
         String output = "";
         output += title + "\n";
         output += "Maciej Malachowski, 292773\n";
         output += "--------------------\n";
-        output += "Data filename: "+ fileName + "\n";
+        output += "Data filename: "+ filename + "\n";
         output += "Length of the series: "+ data.size() + "\n";
         output += "Max value: " + getMax(data).toString() + "\n";
         output += "Min value: " + getMin(data).toString() + "\n";
@@ -118,7 +47,8 @@ public class App {
         }
         output += "--------------------\n";
 
-        System.out.println(output);
+        // System.out.println(output);
+        return output;
     }
 
 
