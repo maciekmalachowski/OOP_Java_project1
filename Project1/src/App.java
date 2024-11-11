@@ -10,6 +10,9 @@ public class App {
 
     // Task II.2
     processOneFile("data_c1.txt","data_c.log","Task II.2");
+
+    // Task III.3
+    processOneFile("data_d1.txt","data_d.log","Task III.3");
         
     }
 
