@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Collections;
 
 public class IOHelper {
     
@@ -14,6 +15,7 @@ public class IOHelper {
 
 
         try(Scanner myScanner = new Scanner(file)) {
+            logger.log(Logger.Level.INFO, "Start processing the file");
             while(myScanner.hasNextLine()) {
                 String line = myScanner.nextLine();
                 try {
@@ -25,7 +27,7 @@ public class IOHelper {
                         addReadoutToSensor(sensors, sensorName, new ReadoutWithUuid(value, id));
                     }
                     else if (result.length == 2) {
-                        addReadoutToSensor(sensors, "<N/A>", new ReadoutWithUuid(Double.parseDouble(result[0]), result[1].replace(" id:", "")));
+                        addReadoutToSensor(sensors, "<N/A>", new ReadoutWithUuid(Double.parseDouble(result[0]), result[1].replace("id:", "")));
                     } 
                     else {
                         addReadoutToSensor(sensors, "<N/A>", new Readout(Double.parseDouble(result[0])));
@@ -36,16 +38,18 @@ public class IOHelper {
                     invalid_records += 1;
                 }
             }
+            logger.log(Logger.Level.INFO, "End of processing");
         }
         catch(FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-
+        
+        Collections.sort(sensors);
         return new FileContent(sensors, invalid_records, filename);
     }
 
-    public static String getOutputInfo(FileContent fContent, String title)
+    public static String getOutputInfo(FileContent fContent, String title, Logger logger)
     {
         String filename = fContent.getFileName();
         int invalid_records = fContent.getNoOfInvalidRecords();
@@ -54,21 +58,24 @@ public class IOHelper {
         output += "Maciej Malachowski, 292773\n";
         output += "--------------------\n";
         output += "Data filename: "+ filename + "\n";
+
         for(Sensor sensor: fContent.getSensors()){
             output += "----\n";
             output += "Sensor name: " + sensor.getName() + "\n";
             output += "Length of the series: "+ sensor.getLengthOfData() + "\n";
-            output += "Max value: " + sensor.getMax().toString() + "\n";
-            output += "Min value: " + sensor.getMin().toString() + "\n";
+            output += "Max value: " + sensor.getMax(logger, true).toString() + "\n";
+            output += "Min value: " + sensor.getMin(logger, true).toString() + "\n";
             output += String.format("Mean value: %.3f\n", sensor.getMean());
             output += "Median: " + sensor.getMedian().toString() + "\n";
-            double eps = (sensor.getMax().getValue()-sensor.getMin().getValue())/100;
-            output += "Number of central elements: " + sensor.noOfCentralElements(sensor.getMean(), eps) + "\n";
-            if (invalid_records != 0){
-                output += "Number of invalid records: "+ invalid_records + "\n";
-            }
+            double eps = (sensor.getMax(logger, false).getValue()-sensor.getMin(logger, false).getValue())/100;
+            output += "Number of central elements: " + sensor.noOfCentralElements(sensor.getMean(), eps, logger) + "\n";
+            // if (invalid_records != 0){
+            //     output += "Number of invalid records: "+ invalid_records + "\n";
+            // }
+
         }
         output += "--------------------\n";
+
         return output;
     }
 
