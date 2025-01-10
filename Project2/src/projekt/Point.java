@@ -1,13 +1,8 @@
 package projekt;
 
-
 public class Point implements Cloneable {
-    final public static double PRECISION = 0.001;
-
-    // if we declare x and y final then
-    // Point would be immutable
-    // (Like String or wrappers)
-
+    final public static double
+            PRECISION = 0.001;
     public double x;
     public double y;
 
@@ -18,7 +13,7 @@ public class Point implements Cloneable {
 
     @Override
     public String toString() {
-        return "[" + (int) x + "," + (int) y + "]";
+        return "[" + (int) x + ", " + (int) y + "]";
     }
 
     private boolean compare(double a, double b) {
@@ -29,10 +24,8 @@ public class Point implements Cloneable {
         return compare(x, obj.x) && compare(y, obj.y);
     }
 
-    // In all arithmetic methods we try to
-    // preserve the original object.
     public Point multiply(double k) {
-        return new Point(x * k, y * k);
+        return new Point(k * x, k * y);
     }
 
     public Point add(Point p) {
@@ -44,7 +37,7 @@ public class Point implements Cloneable {
     }
 
     public static Point midPoint(Point a, Point b) {
-        return (a.add(b)).multiply(0.5);
+        return (a.add(b).multiply(0.5));
     }
 
     public static Point vector(Point a, Point b) {
@@ -56,18 +49,11 @@ public class Point implements Cloneable {
     }
 
     public Point rotate(double angle, Point center) {
-        // not implemented yet - check Linear Algebra
-        // notes for rotation formulas.
-        // return new Point(..., ...);
         return null;
     }
 
-    // This method is obligatory for Cloneable interface
-    // By default (in Object) it makes a shallow copy
-    // of object properties
     public Point clone() {
         return new Point(x, y);
-        // we can also do it like this:
-        // return (Point) super.clone(); // super=Object here
     }
+
 }

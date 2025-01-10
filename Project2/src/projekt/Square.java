@@ -1,7 +1,6 @@
 package projekt;
 
 import javax.swing.*;
-import java.awt.Rectangle;
 import java.awt.*;
 
 public class Square extends Rectangle {
